@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Iframe Content</title>
+  <style>
+    body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+          background: #ffffff; margin:0; padding:16px; color:#0f172a; }
+    .row{ display:flex; gap:8px; align-items:center; }
+    .card{ border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+    .button{ padding:8px 12px; border-radius:10px; border:1px solid #e5e7eb; background:#f8fafc; cursor:pointer }
+    .button.primary{ background: linear-gradient(135deg, #3b82f6, #2563eb); color:#fff; border:none }
+    .input{ padding:8px 10px; border-radius:10px; border:1px solid #e5e7eb; width:100% }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h3 id="frame-title">Hello from inside the iframe</h3>
+    <p id="frame-text">Use your automation to switch into this frame and interact with elements.</p>
+    <div class="row">
+      <input id="frame-input" class="input" placeholder="Type here..." data-testid="iframe-input" />
+      <button class="button" id="btn-echo" data-testid="iframe-echo">Echo</button>
+      <button class="button primary" id="btn-send" data-testid="iframe-send">Send to parent</button>
+    </div>
+    <p id="echo-output" data-testid="iframe-echo-output"></p>
+  </div>
+  <script>
+    const input = document.getElementById('frame-input')
+    const echo = document.getElementById('btn-echo')
+    const send = document.getElementById('btn-send')
+    const out = document.getElementById('echo-output')
+    echo.addEventListener('click', ()=> { out.textContent = input.value })
+    send.addEventListener('click', ()=> {
+      window.parent && window.parent.postMessage({ from:'iframe', msg: input.value || '(empty)' }, '*')
+    })
+  </script>
+</body>
+</html>
